@@ -9,7 +9,7 @@
         /* Variables CSS */
         :root {
             --primary-green: #00853f;
-            --primary-yellow: #fcd116;
+            --primary-yellow: #f9ee44;
             --primary-red: #ce1126;
             --dark-bg: #0a2e1a;
             --light-bg: #f5f5f5;
@@ -31,7 +31,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary-green), #005a2c, #003d1e);
+            background: linear-gradient(135deg, #1e90ff, #0066cc, #004499);
             color: var(--text-light);
             min-height: 100vh;
             overflow-x: hidden;
@@ -499,6 +499,18 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+      
+      body {
+  background-size: 400% 400%;
+  animation: skyMove 20s ease infinite;
+}
+
+@keyframes skyMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
     </style>
 </head>
 <body>
@@ -861,17 +873,27 @@
         }
         
         // Mettre à jour le thème selon l'heure
-        function updateThemeByTime() {
-            const hour = new Date().getHours();
-            const body = document.body;
-            
-            // Fond vert foncé la nuit
-            if (hour >= 18 || hour < 6) {
-                body.style.background = 'linear-gradient(135deg, #003d1e, #002512, #001a0d)';
-            } else {
-                body.style.background = 'linear-gradient(135deg, var(--primary-green), #005a2c, #003d1e)';
-            }
-        }
+// Mettre à jour le thème selon l'heure
+function updateThemeByTime() {
+    const hour = new Date().getHours();
+    const body = document.body;
+
+    if (hour >= 0 && hour < 6) {
+        // 🌌 Nuit profonde (réaliste)
+        body.style.background = "linear-gradient(to top, #0b132b, #1c2541, #3a506b)";
+    } else if (hour >= 6 && hour < 8) {
+        // 🌅 Aube réaliste
+        body.style.background = "linear-gradient(to top, #2c3e50, #e96443, #f9d423)";
+    } else if (hour >= 8 && hour < 18) {
+        // 🌞 Journée claire
+        body.style.background = "linear-gradient(to top, #87ceeb, #b0e0e6, #fdfdfd)";
+    } else {
+        // 🌇 Soirée réaliste
+        body.style.background = "linear-gradient(to top, #ff512f, #dd2476, #1c1c3c)";
+    }
+}
+
+
         
         // Simulation de données en cas d'échec API
         function simulateWeatherData(regionName) {
