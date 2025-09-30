@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Météo Sénégal - Toujours au clair avec le ciel du Sénégal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary-green: #00853f;
+            --primary-yellow: #fcd116;
+            --primary-red: #ce1126;
+            --dark-bg: #0a2e1a;
+            --light-bg: #f5f5f5;
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-green), #005a2c, #003d1e);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* En-tête avec effet glassmorphism */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--glass-bg) url('https://i.postimg.cc/pdcGVD44/Carte-membre.png') center/cover no-repeat;
+    background-size: contain;
+    backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-green), var(--primary-yellow), var(--primary-red));
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--primary-yellow);
+            text-shadow: 0 0 15px rgba(252, 209, 22, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, var(--primary-yellow), #fff, var(--primary-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .slogan {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Section météo actuelle avec effet glassmorphism */
+        .current-weather {
+            background: var(--glass-bg) url('https://i.postimg.cc/NGJVfwqf/Votre-texte-de-paragraphe.png') center/contain no-repeat;
+    backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-weather::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-green), var(--primary-yellow), var(--primary-red));
+        }
+
+        .location-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .city-name {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .change-location {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary-yellow);
+        }
+
+        .change-location:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .flag {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+
+        .date-time {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .weather-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .temperature {
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .weather-icon {
+            font-size: 5rem;
+            margin: 0 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .detail-card i {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary-yellow);
+        }
+
+        /* Prévisions horaires */
+        .hourly-forecast {
+            margin-bottom: 30px;
+        }
+
+        .hourly-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 15px 5px;
+            scrollbar-width: thin;
+        }
+
+        .hourly-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .hourly-container::-webkit-scrollbar-thumb {
+            background: var(--primary-yellow);
+            border-radius: 10px;
+        }
+
+        .hourly-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            min-width: 100px;
+            flex-shrink: 0;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .hourly-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hourly-card.current {
+            background: rgba(252, 209, 22, 0.2);
+            border: 1px solid var(--primary-yellow);
+        }
+
+        .hourly-time {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-yellow);
+        }
+
+        .hourly-icon {
+            font-size: 1.8rem;
+            margin: 8px 0;
+        }
+
+        .hourly-temp {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Prévisions sur 4 jours */
+        .forecast {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .forecast-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .forecast-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .forecast-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .forecast-date {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-yellow);
+        }
+
+        .forecast-icon {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+        }
+
+        .forecast-temp {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Pied de page */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+
+        .footer-text {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Modal de sélection de ville */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-yellow);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--primary-yellow);
+            transform: scale(1.1);
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .region-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 15px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .region-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            border-color: var(--primary-yellow);
+        }
+
+        .region-btn.active {
+            background: rgba(252, 209, 22, 0.2);
+            border-color: var(--primary-yellow);
+            color: var(--primary-yellow);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .temperature {
+                font-size: 3rem;
+            }
+            
+            .weather-icon {
+                font-size: 4rem;
+            }
+            
+            .location-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .current-weather, .forecast-card {
+                padding: 20px 15px;
+            }
+            
+            .temperature {
+                font-size: 2.5rem;
+            }
+            
+            .weather-icon {
+                font-size: 3rem;
+            }
+            
+            .weather-details {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .regions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-lion logo-icon"></i>
+                <h1>Météo Sénégal</h1>
+            </div>
+            <p class="slogan">Toujours au clair avec le ciel du Sénégal 🌞🦁</p>
+        </header>
+
+        <section class="current-weather">
+            <div class="location-info">
+                <div class="city-name">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="city-name">Dakar</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Senegal.svg" 
+     alt="Drapeau du Sénégal" 
+     class="flag" 
+     style="width:30px; height:auto; vertical-align:middle;">
+                    <button class="change-location" id="change-location">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                </div>
+                <div class="date-time" id="date-time">Chargement...</div>
+            </div>
+
+            <div class="weather-main">
+                <div class="temperature">
+                    <span id="temperature">--</span>°C
+                </div>
+                <div class="weather-icon">
+                    <i id="weather-icon" class="fas fa-sun"></i>
+                </div>
+                <div class="weather-desc" id="weather-desc">Ensoleillé</div>
+            </div>
+
+            <div class="weather-details">
+                <div class="detail-card">
+                    <i class="fas fa-tint"></i>
+                    <div class="detail-label">Humidité</div>
+                    <div class="detail-value" id="humidity">--%</div>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-wind"></i>
+                    <div class="detail-label">Vent</div>
+                    <div class="detail-value" id="wind">-- km/h</div>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-temperature-low"></i>
+                    <div class="detail-label">Ressenti</div>
+                    <div class="detail-value" id="feels-like">--°C</div>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <div class="detail-label">Pression</div>
+                    <div class="detail-value" id="pressure">-- hPa</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="hourly-forecast">
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i> Prévisions horaires
+            </h2>
+            <div class="hourly-container" id="hourly-container">
+                <!-- Les cartes horaires seront générées ici par JavaScript -->
+            </div>
+        </section>
+
+        <section class="forecast">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i> Prévisions 4 jours
+            </h2>
+            <div class="forecast-cards" id="forecast-container">
+                <!-- Les cartes de prévision seront générées ici par JavaScript -->
+            </div>
+        </section>
+
+        <footer>
+            <p class="footer-text">Application Météo Sénégal &copy; 2023 - Données météo en temps réel</p>
+        </footer>
+    </div>
+
+    <!-- Modal de sélection de ville -->
+    <div class="modal" id="location-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Choisir une région</h2>
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="regions-grid" id="regions-grid">
+                <!-- Les boutons de région seront générés ici par JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API météo gratuite sans inscription - Open-Meteo
+        const API_URL = 'https://api.open-meteo.com/v1/forecast';
+        
+        // Éléments DOM
+        const cityName = document.getElementById('city-name');
+        const dateTime = document.getElementById('date-time');
+        const temperature = document.getElementById('temperature');
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherDesc = document.getElementById('weather-desc');
+        const humidity = document.getElementById('humidity');
+        const wind = document.getElementById('wind');
+        const feelsLike = document.getElementById('feels-like');
+        const pressure = document.getElementById('pressure');
+        const hourlyContainer = document.getElementById('hourly-container');
+        const forecastContainer = document.getElementById('forecast-container');
+        const changeLocationBtn = document.getElementById('change-location');
+        const locationModal = document.getElementById('location-modal');
+        const closeModal = document.getElementById('close-modal');
+        const regionsGrid = document.getElementById('regions-grid');
+        
+        // Régions et villes du Sénégal avec coordonnées
+        const senegalRegions = {
+            'Dakar': { lat: 14.7167, lon: -17.4677 },
+            'Thiès': { lat: 14.8, lon: -16.9333 },
+            'Saint-Louis': { lat: 16.0333, lon: -16.5 },
+            'Kaolack': { lat: 14.15, lon: -16.0833 },
+            'Ziguinchor': { lat: 12.5833, lon: -16.2667 },
+            'Diourbel': { lat: 14.655, lon: -16.2314 },
+            'Louga': { lat: 15.6167, lon: -16.2167 },
+            'Tambacounda': { lat: 13.7689, lon: -13.6672 },
+            'Kolda': { lat: 12.8833, lon: -14.95 },
+            'Matam': { lat: 15.6558, lon: -13.2554 },
+            'Fatick': { lat: 14.3333, lon: -16.4167 },
+            'Kédougou': { lat: 12.55, lon: -12.1833 },
+            'Sédhiou': { lat: 12.7081, lon: -15.5569 },
+            'Kaffrine': { lat: 14.1167, lon: -15.7 }
+        };
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Charger la météo de Dakar par défaut ou depuis le stockage local
+            const savedLocation = localStorage.getItem('selectedLocation');
+            if (savedLocation) {
+                getWeatherByRegion(savedLocation);
+            } else {
+                getWeatherByRegion('Dakar');
+            }
+            
+            // Initialiser le modal de sélection
+            initializeLocationModal();
+            
+            // Mode automatique selon l'heure
+            updateThemeByTime();
+        });
+        
+        // Mise à jour de la date et heure
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            dateTime.textContent = now.toLocaleDateString('fr-FR', options);
+        }
+        
+        // Initialiser le modal de sélection de région
+        function initializeLocationModal() {
+            // Créer les boutons pour chaque région
+            regionsGrid.innerHTML = '';
+            
+            for (const [region, coords] of Object.entries(senegalRegions)) {
+                const regionBtn = document.createElement('button');
+                regionBtn.className = 'region-btn';
+                regionBtn.textContent = region;
+                regionBtn.addEventListener('click', () => {
+                    selectRegion(region);
+                });
+                regionsGrid.appendChild(regionBtn);
+            }
+            
+            // Gérer l'ouverture/fermeture du modal
+            changeLocationBtn.addEventListener('click', () => {
+                locationModal.style.display = 'flex';
+            });
+            
+            closeModal.addEventListener('click', () => {
+                locationModal.style.display = 'none';
+            });
+            
+            locationModal.addEventListener('click', (e) => {
+                if (e.target === locationModal) {
+                    locationModal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Sélectionner une région
+        function selectRegion(region) {
+            cityName.textContent = region;
+            localStorage.setItem('selectedLocation', region);
+            locationModal.style.display = 'none';
+            getWeatherByRegion(region);
+        }
+        
+        // Obtenir la météo par région
+        async function getWeatherByRegion(region) {
+            try {
+                const regionData = senegalRegions[region];
+                if (!regionData) {
+                    console.error('Région non trouvée:', region);
+                    return;
+                }
+                
+                const { lat, lon } = regionData;
+                await fetchWeatherData(lat, lon, region);
+                
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données météo:', error);
+                // En cas d'erreur, utiliser des données simulées
+                simulateWeatherData(region);
+            }
+        }
+        
+        // Récupérer les données météo
+        async function fetchWeatherData(lat, lon, regionName) {
+            try {
+                const response = await fetch(
+                    `${API_URL}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,pressure_msl,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`
+                );
+                
+                const data = await response.json();
+                updateCurrentWeather(data, regionName);
+                updateHourlyForecast(data);
+                updateDailyForecast(data);
+                
+            } catch (error) {
+                console.error('Erreur API:', error);
+                // En cas d'erreur API, utiliser des données simulées
+                simulateWeatherData(regionName);
+            }
+        }
+        
+        // Mettre à jour l'affichage de la météo actuelle
+        function updateCurrentWeather(data, regionName) {
+            const current = data.current;
+            
+            cityName.textContent = regionName;
+            temperature.textContent = Math.round(current.temperature_2m);
+            humidity.textContent = `${current.relative_humidity_2m}%`;
+            wind.textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+            feelsLike.textContent = `${Math.round(current.apparent_temperature)}°C`;
+            pressure.textContent = `${Math.round(current.pressure_msl)} hPa`;
+            
+            // Mise à jour de l'icône et description météo
+            const weatherInfo = getWeatherInfo(current.weather_code);
+            weatherIcon.className = weatherInfo.icon;
+            weatherDesc.textContent = weatherInfo.description;
+            
+            // Mise à jour du thème selon l'heure
+            updateThemeByTime();
+        }
+        
+        // Mettre à jour les prévisions horaires
+        function updateHourlyForecast(data) {
+            hourlyContainer.innerHTML = '';
+            
+            const now = new Date();
+            const currentHour = now.getHours();
+            
+            // Afficher les 24 prochaines heures
+            for (let i = 0; i < 24; i++) {
+                const hourIndex = currentHour + i;
+                const hourTime = new Date(now);
+                hourTime.setHours(hourTime.getHours() + i);
+                
+                const temp = data.hourly.temperature_2m[hourIndex];
+                const weatherCode = data.hourly.weather_code[hourIndex];
+                const weatherInfo = getWeatherInfo(weatherCode);
+                
+                const hourlyCard = document.createElement('div');
+                hourlyCard.className = `hourly-card ${i === 0 ? 'current' : ''}`;
+                
+                hourlyCard.innerHTML = `
+                    <div class="hourly-time">${hourTime.getHours()}h</div>
+                    <div class="hourly-icon">
+                        <i class="${weatherInfo.icon}"></i>
+                    </div>
+                    <div class="hourly-temp">${Math.round(temp)}°C</div>
+                `;
+                
+                hourlyContainer.appendChild(hourlyCard);
+            }
+        }
+        
+        // Mettre à jour les prévisions sur 4 jours
+        function updateDailyForecast(data) {
+            forecastContainer.innerHTML = '';
+            
+            // Afficher les 4 prochains jours (en commençant par demain)
+            for (let i = 1; i <= 4; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                const weatherCode = data.daily.weather_code[i];
+                const maxTemp = data.daily.temperature_2m_max[i];
+                const minTemp = data.daily.temperature_2m_min[i];
+                const weatherInfo = getWeatherInfo(weatherCode);
+                
+                const forecastCard = document.createElement('div');
+                forecastCard.className = 'forecast-card';
+                
+                forecastCard.innerHTML = `
+                    <div class="forecast-date">${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'short' })}</div>
+                    <div class="forecast-icon">
+                        <i class="${weatherInfo.icon}"></i>
+                    </div>
+                    <div class="forecast-temp">${Math.round(maxTemp)}°C</div>
+                    <div class="forecast-desc">${weatherInfo.description}</div>
+                    <div class="forecast-min">Min: ${Math.round(minTemp)}°C</div>
+                `;
+                
+                forecastContainer.appendChild(forecastCard);
+            }
+        }
+        
+        // Obtenir les informations météo à partir du code
+        function getWeatherInfo(weatherCode) {
+            // Mapping des codes météo Open-Meteo
+            const weatherMap = {
+                0: { icon: 'fas fa-sun', description: 'Ciel dégagé' },
+                1: { icon: 'fas fa-sun', description: 'Principalement clair' },
+                2: { icon: 'fas fa-cloud-sun', description: 'Partiellement nuageux' },
+                3: { icon: 'fas fa-cloud', description: 'Nuageux' },
+                45: { icon: 'fas fa-smog', description: 'Brouillard' },
+                48: { icon: 'fas fa-smog', description: 'Brouillard givrant' },
+                51: { icon: 'fas fa-cloud-drizzle', description: 'Bruine légère' },
+                53: { icon: 'fas fa-cloud-drizzle', description: 'Bruine modérée' },
+                55: { icon: 'fas fa-cloud-drizzle', description: 'Bruine dense' },
+                61: { icon: 'fas fa-cloud-rain', description: 'Pluie légère' },
+                63: { icon: 'fas fa-cloud-rain', description: 'Pluie modérée' },
+                65: { icon: 'fas fa-cloud-showers-heavy', description: 'Forte pluie' },
+                80: { icon: 'fas fa-cloud-rain', description: 'Averses légères' },
+                81: { icon: 'fas fa-cloud-rain', description: 'Averses modérées' },
+                82: { icon: 'fas fa-cloud-showers-heavy', description: 'Forte averses' },
+                95: { icon: 'fas fa-bolt', description: 'Orage' },
+                96: { icon: 'fas fa-bolt', description: 'Orage avec grêle légère' },
+                99: { icon: 'fas fa-bolt', description: 'Orage avec grêle forte' }
+            };
+            
+            return weatherMap[weatherCode] || { icon: 'fas fa-sun', description: 'Conditions inconnues' };
+        }
+        
+        // Mettre à jour le thème selon l'heure
+        function updateThemeByTime() {
+            const hour = new Date().getHours();
+            const body = document.body;
+            
+            // Fond vert foncé la nuit
+            if (hour >= 18 || hour < 6) {
+                body.style.background = 'linear-gradient(135deg, #003d1e, #002512, #001a0d)';
+            } else {
+                body.style.background = 'linear-gradient(135deg, var(--primary-green), #005a2c, #003d1e)';
+            }
+        }
+        
+        // Simulation de données en cas d'échec API
+        function simulateWeatherData(regionName) {
+            const current = {
+                temperature_2m: Math.round(25 + Math.random() * 10),
+                relative_humidity_2m: Math.round(30 + Math.random() * 50),
+                wind_speed_10m: Math.round(5 + Math.random() * 15),
+                apparent_temperature: Math.round(25 + Math.random() * 10),
+                pressure_msl: Math.round(1000 + Math.random() * 50),
+                weather_code: Math.random() > 0.5 ? 0 : 2
+            };
+            
+            // Simuler des données horaires
+            const hourly = {
+                temperature_2m: Array.from({ length: 24 }, (_, i) => 
+                    Math.round(20 + Math.random() * 15 - Math.abs(12 - i) / 2)
+                ),
+                weather_code: Array.from({ length: 24 }, () => 
+                    Math.random() > 0.7 ? 2 : (Math.random() > 0.9 ? 61 : 0)
+                )
+            };
+            
+            // Simuler des données quotidi ennes
+            const daily = {
+                weather_code: Array.from({ length: 5 }, () => 
+                    Math.random() > 0.7 ? 2 : (Math.random() > 0.9 ? 61 : 0)
+                ),
+                temperature_2m_max: Array.from({ length: 5 }, () => 
+                    Math.round(25 + Math.random() * 10)
+                ),
+                temperature_2m_min: Array.from({ length: 5 }, () => 
+                    Math.round(15 + Math.random() * 10)
+                )
+            };
+            
+            const simulatedData = {
+                current,
+                hourly,
+                daily
+            };
+            
+            updateCurrentWeather(simulatedData, regionName);
+            updateHourlyForecast(simulatedData);
+            updateDailyForecast(simulatedData);
+        }
+    </script>
+</body>
+</html>
