@@ -50,7 +50,7 @@
             text-align: center;
             margin-bottom: 30px;
             padding: 25px;
-            background: var(--glass-bg) url('https://i.postimg.cc/pdcGVD44/Carte-membre.png') center/cover no-repeat;
+            background: var(--glass-bg) url(' ') center/cover no-repeat;
     background-size: contain;
     backdrop-filter: blur(15px);
             border-radius: 20px;
@@ -103,7 +103,7 @@
 
         /* Section météo actuelle avec effet glassmorphism */
         .current-weather {
-            background: var(--glass-bg) url('https://i.postimg.cc/NGJVfwqf/Votre-texte-de-paragraphe.png') center/contain no-repeat;
+            background: var(--glass-bg) url(' ') center/contain no-repeat;
     backdrop-filter: blur(15px);
             border-radius: 20px;
             padding: 30px;
@@ -520,7 +520,7 @@
                 <i class="fas fa-lion logo-icon"></i>
                 <h1>Météo Sénégal</h1>
             </div>
-            <p class="slogan">Toujours au clair avec le ciel du Sénégal 🌞🦁</p>
+            <p class="slogan">Bienvenue au pays de la Teranga !</p>
         </header>
 
         <section class="current-weather">
@@ -592,7 +592,7 @@
         </section>
 
         <footer>
-            <p class="footer-text">Application Météo Sénégal &copy; 2023 - Données météo en temps réel</p>
+            <p class="footer-text">Un Peuple – Un But – Une Foi </p>
         </footer>
     </div>
 
@@ -873,25 +873,34 @@
         }
         
         // Mettre à jour le thème selon l'heure
-// Mettre à jour le thème selon l'heure
 function updateThemeByTime() {
     const hour = new Date().getHours();
     const body = document.body;
 
-    if (hour >= 0 && hour < 6) {
-        // 🌌 Nuit profonde (réaliste)
-        body.style.background = "linear-gradient(to top, #0b132b, #1c2541, #3a506b)";
+    if (hour >= 19 || hour < 6) {
+        // 🌌 Nuit (19h - 6h)
+        body.style.backgroundImage = "url('https://i.postimg.cc/sxvnqKcm/istockphoto-172696372-612x612.jpg')";
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
     } else if (hour >= 6 && hour < 8) {
-        // 🌅 Aube réaliste
-        body.style.background = "linear-gradient(to top, #2c3e50, #e96443, #f9d423)";
+        // 🌅 Aube (6h - 8h)
+        body.style.backgroundImage = "url('https://i.postimg.cc/RhyPBfs8/5e5a9c842134d019a4aef43042c98ebb.jpg')";
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
     } else if (hour >= 8 && hour < 18) {
-        // 🌞 Journée claire
-        body.style.background = "linear-gradient(to top, #87ceeb, #b0e0e6, #fdfdfd)";
-    } else {
-        // 🌇 Soirée réaliste
-        body.style.background = "linear-gradient(to top, #ff512f, #dd2476, #1c1c3c)";
+        // 🌞 Journée (8h - 18h)
+        body.style.backgroundImage = "url('https://i.postimg.cc/NFSNcTJ3/istockphoto-675934872-640x640.jpg')";
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+    } else if (hour >= 18 && hour < 19) {
+        // 🌇 Coucher du soleil (18h - 19h)
+        body.style.backgroundImage = "url('https://i.postimg.cc/90KxhTg3/pexels-photo-1032650.jpg')";
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
     }
 }
+
+
 
 
         
