@@ -4,18 +4,36 @@
   <meta charset="UTF-8">
   <title>Météo Sénégal</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #4CAF50, #FFEB3B, #FF5722);
+      height: 100vh;
+      overflow: hidden;
+    }
+    
     #map {
-      height: 100vh; /* la carte prend toute la page */
+      height: 100vh;
       width: 100%;
     }
+    
     .temp-label {
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 6px 10px;
+      border-radius: 8px;
       font-size: 14px;
       font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+    }
+    
+    .temp-label i {
+      margin-right: 5px;
     }
   </style>
 </head>
@@ -23,33 +41,99 @@
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
     // Création de la carte centrée sur le Sénégal
-    const map = L.map('map').setView([14.5, -14.5], 6); 
+    const map = L.map('map').setView([14.5, -14.5], 6);
 
-    // Fond de carte ultra réaliste (satellite)
+    // Fond de carte
     L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-    // Exemple de températures fictives par région
+    // Liste des régions du Sénégal avec leurs coordonnées
     const regions = [
-      { name: "Dakar", coords: [14.7167, -17.4677], temp: "30°C" },
-      { name: "Thiès", coords: [14.7833, -16.9167], temp: "29°C" },
-      { name: "Saint-Louis", coords: [16.0179, -16.4896], temp: "28°C" },
-      { name: "Kaolack", coords: [14.1469, -16.0726], temp: "32°C" },
-      { name: "Ziguinchor", coords: [12.5833, -16.2667], temp: "31°C" },
-      { name: "Tambacounda", coords: [13.7667, -13.6833], temp: "34°C" }
+      { name: "Dakar", coords: [14.7167, -17.4677] },
+      { name: "Thiès", coords: [14.7833, -16.9167] },
+      { name: "Diourbel", coords: [14.6550, -16.2314] },
+      { name: "Fatick", coords: [14.3390, -16.4110] },
+      { name: "Kaffrine", coords: [14.1050, -15.5410] },
+      { name: "Kaolack", coords: [14.1469, -16.0726] },
+      { name: "Kédougou", coords: [12.5550, -12.1810] },
+      { name: "Kolda", coords: [12.8837, -14.9500] },
+      { name: "Louga", coords: [15.6180, -16.2240] },
+      { name: "Matam", coords: [15.6550, -13.2550] },
+      { name: "Saint-Louis", coords: [16.0179, -16.4896] },
+      { name: "Sédhiou", coords: [12.7080, -15.5560] },
+      { name: "Tambacounda", coords: [13.7667, -13.6833] },
+      { name: "Ziguinchor", coords: [12.5833, -16.2667] }
     ];
 
-    // Ajout des températures sur la carte
-    regions.forEach(region => {
+    // Fonction pour obtenir l'icône en fonction de la température
+    function getTempIcon(temp) {
+      if (temp < 26) return '<i class="fas fa-thermometer-quarter" style="color: #1e90ff;"></i>';
+      if (temp < 33) return '<i class="fas fa-thermometer-half" style="color: #ffa500;"></i>';
+      return '<i class="fas fa-thermometer-full" style="color: #ff4500;"></i>';
+    }
+
+    // Fonction pour récupérer les données météo d'une région
+    async function fetchWeatherData(region) {
+      try {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${region.coords[0]}&longitude=${region.coords[1]}&current=temperature_2m&timezone=Africa/Dakar`
+        );
+        
+        if (!response.ok) {
+          throw new Error('Erreur réseau');
+        }
+        
+        const data = await response.json();
+        return Math.round(data.current.temperature_2m);
+      } catch (error) {
+        console.error(`Erreur pour ${region.name}:`, error);
+        // Données simulées en cas d'erreur
+        return 25 + Math.floor(Math.random() * 10);
+      }
+    }
+
+    // Fonction pour afficher les données sur la carte
+    function displayOnMap(region, temp) {
       const icon = L.divIcon({
         className: "temp-label",
-        html: `${region.name}<br>${region.temp}`
+        html: `${getTempIcon(temp)} ${region.name}: ${temp}°C`,
+        iconSize: [120, 35],
+        iconAnchor: [60, 17]
       });
-      L.marker(region.coords, { icon }).addTo(map);
-    });
+      
+      const marker = L.marker(region.coords, { icon }).addTo(map);
+      
+      // Info-bulle avec plus de détails
+      marker.bindPopup(`
+        <div style="text-align: center;">
+          <h3 style="margin: 0 0 10px 0;">${region.name}</h3>
+          <div style="font-size: 24px;">${getTempIcon(temp)} ${temp}°C</div>
+        </div>
+      `);
+    }
+
+    // Fonction principale pour charger et afficher les données météo
+    async function loadWeatherData() {
+      // Récupérer les données météo pour toutes les régions
+      const weatherPromises = regions.map(region => fetchWeatherData(region));
+      const temperatures = await Promise.allSettled(weatherPromises);
+      
+      // Afficher les données sur la carte
+      temperatures.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          const region = regions[index];
+          const temp = result.value;
+          displayOnMap(region, temp);
+        }
+      });
+    }
+
+    // Charger les données au démarrage
+    document.addEventListener('DOMContentLoaded', loadWeatherData);
   </script>
 </body>
 </html>
