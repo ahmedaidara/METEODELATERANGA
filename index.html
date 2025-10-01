@@ -474,35 +474,41 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .current-weather, .forecast-card {
-                padding: 20px 15px;
-            }
-            
-            .temperature {
-                font-size: 2.5rem;
-            }
-            
-            .weather-icon {
-                font-size: 3rem;
-            }
-            
-            .weather-details {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .regions-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
+       @media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .current-weather, .forecast-card {
+        padding: 20px 15px;
+    }
+    
+    .temperature {
+        font-size: 2.5rem;
+    }
+    
+    .weather-icon {
+        font-size: 3rem;
+    }
+    
+    .weather-details {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .regions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    /* Nouvelle règle pour afficher 2 prévisions par ligne */
+    .forecast-cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
       
-      body {
-  background-size: 400% 400%;
-  animation: skyMove 20s ease infinite;
+body {
+  background-size: cover;
+  animation: skyMove 320s ease infinite;
 }
 
 @keyframes skyMove {
