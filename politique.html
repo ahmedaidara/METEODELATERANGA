@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Confidentialité - Météo Sénégal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e90ff, #0066cc, #004499);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #00853f;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #f9ee44;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00853f;
+            margin-bottom: 10px;
+        }
+
+        .last-update {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #00853f;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f9ee44;
+        }
+
+        h3 {
+            color: #ce1126;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f9ee44, #ffd700);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ce1126;
+            margin: 20px 0;
+        }
+
+        .contact-info {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 1px solid #1e90ff;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00853f, #00a550);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 133, 63, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-lion logo-icon"></i>
+                <h1>Politique de Confidentialité</h1>
+            </div>
+            <p class="last-update">Dernière mise à jour : 1 Octobre 2025</p>
+        </div>
+
+        <div class="highlight">
+            <p><strong>🌍 Météo Sénégal - "Bienvenue au pays de la Teranga !"</strong></p>
+            <p>Votre confidentialité est notre priorité. Cette politique explique comment nous collectons, utilisons et protégeons vos informations.</p>
+        </div>
+
+        <h2>1. Collecte des Informations</h2>
+        
+        <h3>Informations que nous collectons :</h3>
+        <ul>
+            <li><strong>Localisation :</strong> Votre région sélectionnée (Dakar, Thiès, Saint-Louis, etc.)</li>
+            <li><strong>Préférences :</strong> Votre dernière région visitée stockée localement</li>
+            <li><strong>Données techniques :</strong> Type d'appareil, navigateur, résolution d'écran</li>
+            <li><strong>Données météo :</strong> Informations météorologiques pour votre région</li>
+        </ul>
+
+        <h3>Ce que nous NE collectons PAS :</h3>
+        <ul>
+            <li>❌ Votre position GPS exacte</li>
+            <li>❌ Informations personnelles identifiables</li>
+            <li>❌ Données de navigation détaillées</li>
+            <li>❌ Historique de recherche</li>
+            <li>❌ Données de compte ou de connexion</li>
+        </ul>
+
+        <h2>2. Utilisation des Informations</h2>
+        <p>Nous utilisons vos informations uniquement pour :</p>
+        <ul>
+            <li>📊 Fournir les prévisions météorologiques précises</li>
+            <li>📍 Personnaliser l'affichage selon votre région</li>
+            <li>💾 Sauvegarder vos préférences localement</li>
+            <li>🔧 Améliorer les performances de l'application</li>
+            <li>🌙 Adapter l'interface selon l'heure de la journée</li>
+        </ul>
+
+        <h2>3. Stockage des Données</h2>
+        <p><strong>Stockage Local :</strong> Vos préférences (région sélectionnée) sont stockées uniquement sur votre appareil via le localStorage de votre navigateur.</p>
+        <p><strong>Aucun Serveur :</strong> Nous n'avons pas de base de données centrale. Toutes vos données restent sur votre appareil.</p>
+        <p><strong>Suppression :</strong> Vos données sont automatiquement supprimées si vous videz le cache de votre navigateur.</p>
+
+        <h2>4. Cookies et Technologies Similaires</h2>
+        <p><strong>Aucun Cookie :</strong> Notre application n'utilise pas de cookies de suivi.</p>
+        <p><strong>Stockage Local :</strong> Nous utilisons le localStorage uniquement pour mémoriser votre région préférée.</p>
+
+        <h2>5. Partage des Informations</h2>
+        <p><strong>Nous ne partageons aucune donnée personnelle avec des tiers.</strong></p>
+        <p>Les données météorologiques sont fournies par l'API Open-Meteo, qui peut collecter des données techniques anonymes conformément à sa propre politique de confidentialité.</p>
+
+        <h2>6. Sécurité des Données</h2>
+        <p>Nous mettons en œuvre des mesures de sécurité appropriées pour protéger vos informations :</p>
+        <ul>
+            <li>🔒 Connexion HTTPS sécurisée</li>
+            <li>🛡️ Protection contre les attaques XSS</li>
+            <li>📱 Validation des données côté client</li>
+            <li>🔍 Surveillance régulière de sécurité</li>
+        </ul>
+
+        <h2>7. Vos Droits</h2>
+        <p>Conformément à la loi sénégalaise sur la protection des données, vous avez le droit de :</p>
+        <ul>
+            <li>👁️ Accéder à vos données stockées</li>
+            <li>✏️ Modifier vos préférences</li>
+            <li>🗑️ Supprimer toutes vos données</li>
+            <li>📝 Vous opposer au traitement de vos données</li>
+        </ul>
+
+        <h2>8. Données des Enfants</h2>
+        <p>Notre application est conforme aux réglementations sur la protection des enfants :</p>
+        <ul>
+            <li>👶 Ne collecte pas de données d'enfants de moins de 13 ans</li>
+            <li>📚 Contenu adapté à tous les publics</li>
+            <li>🛡️ Mesures de protection renforcées</li>
+        </ul>
+
+        <h2>9. Modifications de la Politique</h2>
+        <p>Nous nous réservons le droit de modifier cette politique de confidentialité. Les changements significatifs seront signalés par :</p>
+        <ul>
+            <li>📢 Notification dans l'application</li>
+            <li>🔔 Mise à jour de la date de révision</li>
+            <li>📧 Communication pour les changements majeurs</li>
+        </ul>
+
+       
+
+        <h2>10. Consentement</h2>
+        <p>En utilisant notre application Météo Sénégal, vous consentez à notre politique de confidentialité et acceptez ses termes.</p>
+
+        <div class="highlight">
+            <p><strong>⚠️ Important :</strong> Cette application utilise l'API Open-Meteo pour les données météorologiques. Veuillez consulter leur politique de confidentialité pour plus d'informations sur leurs pratiques de collecte de données.</p>
+        </div>
+
+       
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
