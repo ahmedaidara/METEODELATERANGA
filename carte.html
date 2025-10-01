@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Météo Sénégal</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    #map {
+      height: 100vh; /* la carte prend toute la page */
+      width: 100%;
+    }
+    .temp-label {
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Création de la carte centrée sur le Sénégal
+    const map = L.map('map').setView([14.5, -14.5], 6); 
+
+    // Fond de carte ultra réaliste (satellite)
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    // Exemple de températures fictives par région
+    const regions = [
+      { name: "Dakar", coords: [14.7167, -17.4677], temp: "30°C" },
+      { name: "Thiès", coords: [14.7833, -16.9167], temp: "29°C" },
+      { name: "Saint-Louis", coords: [16.0179, -16.4896], temp: "28°C" },
+      { name: "Kaolack", coords: [14.1469, -16.0726], temp: "32°C" },
+      { name: "Ziguinchor", coords: [12.5833, -16.2667], temp: "31°C" },
+      { name: "Tambacounda", coords: [13.7667, -13.6833], temp: "34°C" }
+    ];
+
+    // Ajout des températures sur la carte
+    regions.forEach(region => {
+      const icon = L.divIcon({
+        className: "temp-label",
+        html: `${region.name}<br>${region.temp}`
+      });
+      L.marker(region.coords, { icon }).addTo(map);
+    });
+  </script>
+</body>
+</html>
